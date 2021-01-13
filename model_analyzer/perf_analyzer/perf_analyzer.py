@@ -12,11 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from itertools import product
 from subprocess import check_output, CalledProcessError, STDOUT
 import logging
 
-from model_analyzer.model_analyzer_exceptions import TritonModelAnalyzerException
+from model_analyzer.model_analyzer_exceptions \
+    import TritonModelAnalyzerException
 from model_analyzer.record.perf_latency import PerfLatency
 from model_analyzer.record.perf_throughput import PerfThroughput
 
@@ -49,6 +49,7 @@ class PerfAnalyzer:
         self.bin_path = path
         self._config = config
         self._output = None
+        self._perf_records = None
 
     def run(self, metrics):
         """
@@ -83,7 +84,11 @@ class PerfAnalyzer:
                                                 start_new_session=True,
                                                 stderr=STDOUT,
                                                 encoding='utf-8')
-                    return [metric(self._output) for metric in metrics]
+                    self._perf_records = [
+                        metric(self._output) for metric in metrics
+                    ]
+
+                    return
                 except CalledProcessError as e:
                     if e.output.find("Please use a larger time window.") > 0:
                         self._config['measurement-interval'] += INTERVAL_DELTA
@@ -111,4 +116,18 @@ class PerfAnalyzer:
             return self._output
         raise TritonModelAnalyzerException(
             "Attempted to get perf_analyzer output"
+            "without calling run first.")
+
+    def get_records(self):
+        """
+        Returns
+        -------
+        The stdout output of the
+        last perf_analyzer run
+        """
+
+        if self._perf_records:
+            return self._perf_records
+        raise TritonModelAnalyzerException(
+            "Attempted to get perf_analyzer resultss"
             "without calling run first.")

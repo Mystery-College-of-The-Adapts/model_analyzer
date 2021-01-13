@@ -21,7 +21,8 @@ from .config_list_string import ConfigListString
 from .config_list_numeric import ConfigListNumeric
 from .config_object import ConfigObject
 from .config_list_generic import ConfigListGeneric
-from model_analyzer.model_analyzer_exceptions import TritonModelAnalyzerException
+from model_analyzer.model_analyzer_exceptions \
+    import TritonModelAnalyzerException
 
 
 class AnalyzerConfig:
@@ -66,13 +67,16 @@ class AnalyzerConfig:
 
         constraints_scheme = ConfigObject(
             schema={
-                'throughput': ConfigObject(schema={
+                'perf_throughput':
+                ConfigObject(schema={
                     'min': ConfigPrimitive(int),
                 }),
-                'latency': ConfigObject(schema={
+                'perf_latency':
+                ConfigObject(schema={
                     'max': ConfigPrimitive(int),
                 }),
-                'gpu_memory': ConfigObject(schema={
+                'gpu_used_memory':
+                ConfigObject(schema={
                     'max': ConfigPrimitive(int),
                 }),
             })

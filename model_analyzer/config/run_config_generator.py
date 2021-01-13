@@ -12,28 +12,37 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .record import RecordType
+from abc import ABC, abstractmethod
 
 
-class MetricsMapper:
+class RunConfigGenerator(ABC):
     """
-    Class maps metrics to record types
+    An abstract class that parses analyzer config
+    and generates RunConfigs
     """
 
-    @staticmethod
-    def get_metric_types(tags):
+    @abstractmethod
+    def __iter__(self):
         """
-        Parameters
-        ----------
-        tags : list of str
-            Human readable names for the 
-            metrics to monitor. They correspond
-            to actual record types.
+        Allows using this object
+        as an iterator
+        """
+
+        return self
+
+    @abstractmethod
+    def __next__(self):
+        """
+        Chooses the next set of run parameters
 
         Returns
         -------
-        List
-            of record types being monitored
+        RunConfig
+            Corresponding to a ModelConfig and some
+            run parameters
+        
+        Raises
+        ------
+        StopIteration
+            Reaching end of all parameters
         """
-
-        return [RecordType.get(tag) for tag in tags]

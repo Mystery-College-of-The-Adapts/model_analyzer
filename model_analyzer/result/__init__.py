@@ -11,30 +11,3 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
-class Model:
-    """
-    A class that encapsulates
-    all the metadata about
-    a model.
-    """
-
-    def __init__(self, name):
-        """
-        Parameters
-        -------
-        name : str
-            The name of this model
-        """
-
-        self._name = name
-
-    def name(self):
-        """
-        Returns
-        -------
-        The name of this model
-        """
-
-        return self._name
